@@ -3,7 +3,10 @@ package ie.atu.cicd1catalogservice.Service;
 import ie.atu.cicd1catalogservice.Model.Product;
 import ie.atu.cicd1catalogservice.Repository.ProductRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,5 +27,11 @@ public class ProductService
     {
         product.setId(null);
         return productRepository.save(product);
+    }
+
+    public Product getById(Long id)
+    {
+        return productRepository.findById(id).
+                orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Product Not Found"));
     }
 }
