@@ -1,26 +1,28 @@
 package ie.atu.cicd1catalogservice.Service;
 
 import ie.atu.cicd1catalogservice.Model.Product;
+import ie.atu.cicd1catalogservice.Repository.ProductRepository;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ProductService
 {
-    private final List<Product> products = new ArrayList<>();
-    private long nextId = 1;
+    private final ProductRepository productRepository;
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     public List<Product> getAll()
     {
-        return products;
+        return productRepository.findAll();
     }
 
     public Product createProduct(Product product)
     {
-        product.setId(nextId++);
-        products.add(product);
-        return product;
+        product.setId(null);
+        return productRepository.save(product);
     }
 }
