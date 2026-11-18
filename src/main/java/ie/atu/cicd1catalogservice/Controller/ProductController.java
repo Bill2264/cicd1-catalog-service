@@ -2,8 +2,11 @@ package ie.atu.cicd1catalogservice.Controller;
 
 import ie.atu.cicd1catalogservice.Model.Product;
 import ie.atu.cicd1catalogservice.Service.ProductService;
+import ie.atu.cicd1catalogservice.dto.CreateProductRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -23,14 +26,27 @@ public class ProductController {
     }
 
     @PostMapping
-    public  Product createProduct(@RequestBody Product product)
+    @ResponseStatus(HttpStatus.CREATED)
+    public  Product createProduct(@RequestBody CreateProductRequest request)
     {
-        return  productService.createProduct(product);
+        return  productService.createProduct(request);
     }
 
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id)
     {
         return  productService.getById(id);
+    }
+
+    @GetMapping("/min-price")
+    public List<Product> getProductByminprice(@RequestParam("price") BigDecimal price)
+    {
+        return productService.findByMinPrice(price);
+    }
+
+    @GetMapping("/by-category")
+    public List<Product> getProductByCategory(@RequestParam("name") String categoryName)
+    {
+        return productService.findbyCategoryName(categoryName);
     }
 }
